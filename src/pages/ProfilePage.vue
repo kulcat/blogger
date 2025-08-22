@@ -1,38 +1,16 @@
 <script setup>
 import { AppState } from '@/AppState';
 import BlogPreview from '@/components/BlogPreview.vue';
-import { blogService } from '@/services/BlogService';
-import { Pop } from '@/utils/Pop';
 import { computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
 
-onMounted(() => {
-  blogService.setActiveProfile(route.params.id);
-  getBlogs();
-});
+// const blogs = computed(() => AppState.blogs.filter);
 
-watch(
-  () => route.params.id,
-  (id) => {
-    blogService.setActiveProfile(id);
-    getBlogs();
-  },
-  { immediate: true }
-);
+// const creator = blogs.value.find(blog => blog.creator.id === route.params.id );
 
-const blogs = computed(() => AppState.blogs);
-
-async function getBlogs() {
-  try {
-    await blogService.getBlogs();
-  }
-  catch (error) {
-    Pop.toast('Could not get blogs', 'error');
-    console.log(error);
-  }
-}
+const profileBlogs = computed(() => AppState.blogs.filter(blog => blog.creatorId === route.params.id));
 
 </script>
 
@@ -41,20 +19,20 @@ async function getBlogs() {
     <div class="row d-flex flex-column gap-4 m-4">
       <div class="d-flex align-items-center gap-1">
         <img class="object-fit-contain rounded-circle" style="width: 10rem; height: 10rem;"
-          :src="blogs[0].creator.picture">
-        <span class="fw-bold text-black">{{ blogs[0].creator.name }}</span>
-        <button>
+          :src="profileBlogs[0]?.creator?.picture">
+        <span class="fw-bold text-black">{{ profileBlogs[0]?.creator?.name }}</span>
+        <button v-if="profileBlogs[0]?.creator?.id === AppState.account.id">
           <i class="mdi mdi-pencil"></i>
         </button>
       </div>
       <div>
-        <button>
+        <button v-if="profileBlogs[0]?.creator?.id === AppState.account.id">
           <i class="mdi mdi-plus"></i>
         </button>
       </div>
     </div>
     <div class="row d-flex flex-column gap-4 m-4">
-      <BlogPreview v-for="blog in blogs" :blog="blog" :key="blog.id" />
+      <BlogPreview v-for="blog in profileBlogs" :blog="blog" :key="blog.id" />
     </div>
   </main>
 </template>

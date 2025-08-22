@@ -1,6 +1,6 @@
 <script setup>
 import { Blog } from '@/models/Blog';
-
+import { blogService } from '@/services/BlogService';
 
 defineProps({
   blog: Blog,
@@ -24,6 +24,10 @@ defineProps({
         <span class="fw-bolder text-dark-emphasis">{{ blog.title }}</span>
         <p class="fw-light text-clamp">{{ blog.body }}</p>
 
+        <RouterLink class="link-underline-opacity-0 " :to="{ name: 'BlogView' }"
+          @click="blogService.setActiveBlog(blog)">
+          <span>Read more and comment</span>
+        </RouterLink>
       </div>
 
       <span class="fw-lighter">{{ blog.date }}</span>

@@ -7,25 +7,19 @@ export class BlogService {
     const response = await api.get(`api/blogs`);
 
     console.log(response);
-    AppState.blogs = [];
+    AppState.blogs.length = 0;
 
-    if(AppState.activeCreatorId) {
-      const filteredResponse = response.data.filter(data => data.creatorId == AppState.activeCreatorId);
-      
-      filteredResponse.forEach(data => {
-        AppState.blogs.push(new Blog(data));
-      });
-    }
-    else {
-      response.data.forEach(data => {
-        AppState.blogs.push(new Blog(data));
-      });
-    }
+    response.data.forEach(data => {
+      AppState.blogs.push(new Blog(data));
+    });
    } 
 
-   setActiveProfile(id) {
-    AppState.activeCreatorId = id;
-    console.log(AppState.activeCreatorId)
+   async createBlog() {
+
+   }
+
+   setActiveBlog(blog) {
+    AppState.activeBlog = blog;
    }
 }
 
