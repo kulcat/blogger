@@ -29,17 +29,31 @@ async function getBlogs() {
 </script>
 
 <template>
-  <main class="container">
-
-    <button v-if="AppState.account" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#myModal">
+  <div class="container">
+    <button v-if="AppState.account" class="btn btn-warning my-3" data-bs-toggle="modal" data-bs-target="#newBlogModal"
+      style="width: 3rem; height: 3rem;">
       <i class="mdi mdi-plus"></i>
     </button>
+  </div>
 
-    <div v-if="AppState.account" id="myModal" class="modal fade" tabindex="-1" aria-hidden="true">
-      <BlogForm :creator="AppState.account" />
+  <main class="container d-flex flex-column">
+
+    <div v-if="AppState.account" id="newBlogModal" class="modal fade" tabindex="-1" aria-hidden="true"
+      style="width: 100% !important;">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content container">
+          <div class="modal-header bg-warning">
+            <h5 class="modal-title">Create a Blog</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <BlogForm :creator="AppState.account" />
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="row d-flex flex-column gap-4 m-4">
+    <div class="row d-flex flex-column gap-4 g-0">
       <BlogPreview v-for="blog in blogs" :blog="blog" :key="blog.id" />
     </div>
 

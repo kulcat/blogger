@@ -14,9 +14,14 @@ export class BlogService {
     });
    } 
 
-   async createBlog() {
+  
+  async createBlog(blogData) {
+    const response = await api.post('api/blogs', blogData);
+  }
 
-   }
+  async deleteBlog(blogId) {
+    const response = await api.delete(`api/blogs:id=${blogId}`);
+  }
 
    setActiveBlog(blog) {
     AppState.activeBlog = blog;
