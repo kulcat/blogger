@@ -21,10 +21,10 @@ async function submitForm() {
       title: title.value,
       body: body.value,
       imgUrl: imgUrl.value,
-      createdAt: new Date(),
     };
 
-    await blogService.createBlog({ blogData });
+    await blogService.createBlog(blogData);
+    await blogService.getBlogs();
     Pop.toast('Blog created!', 'success');
 
     title.value = '';
@@ -44,8 +44,7 @@ async function submitForm() {
 const lastUpdated = computed(() => new Date().toLocaleString());
 
 const onImageError = (e) => {
-  e.target.src =
-    "https://via.placeholder.com/300x200?text=Invalid+Image+URL";
+  e.target.src = "";
 };
 
 </script>
@@ -55,30 +54,32 @@ const onImageError = (e) => {
     <div class="d-flex flex-column border-2 border border-black rounded-3 shadow-lg" style="">
 
       <div>
-        <div v-if="imgUrl" class="mt-3">
-          <img class="img-fluid object-fit-cover w-100 h-100" :src="imgUrl" alt="Preview" style=""
-            @error="onImageError" />
+        <div class="">
+          <img v-if="imgUrl" class="img-fluid object-fit-cover w-100 h-100" :src="imgUrl" alt="Preview"
+            style="max-height: 90vh; object-position: center;" @error="onImageError" />
+          <input class="object-fit-cover w-100 h-100" type="text" placeholder="https://image.jpg" name="image"
+            v-model="imgUrl">
         </div>
-        <input type="text" placeholder="https://image.jpg" name="image" v-model="imgUrl">
       </div>
 
       <div>
-        <div class="d-flex flex-column">
+        <div class="d-flex flex-row">
           <div class="d-flex align-items-center gap-1">
-            <img class="object-fit-contain rounded-circle" style="width: 10rem; height: 10rem;" :src="creator.picture">
+            <img class="object-fit-contain rounded-circle" style="width: 10rem; height: 10rem;" :src="creator?.picture">
           </div>
 
-          <input type="text" placeholder="Title" name="title" v-model="title" :required="true">
+          <div class="d-flex flex-col">
+            <input type="text" placeholder="Title" name="title" v-model="title" :required="true">
 
-          <span class="fw-bold text-black">By {{ creator.name }}</span>
+            <span class="fw-bold text-black">By {{ creator?.name }}</span>
 
-          <span class="fw-lighter">Last updated: {{ lastUpdated }}</span>
-
+            <span class="fw-lighter">Last updated: {{ lastUpdated }}</span>
+          </div>
         </div>
 
-        <input type="text" placeholder="Post text" name="body" v-model="body" :required="true">
+        <input type="text" class="w-100 h-100" placeholder="Post text" name="body" v-model="body" :required="true">
 
-        <input type="submit" value="Post">
+        <button class="btn btn-warning" type="submit">Post Blog</button>
 
       </div>
 

@@ -16,11 +16,12 @@ export class BlogService {
 
   
   async createBlog(blogData) {
-    const response = await api.post('api/blogs', blogData);
+    const newBlog  = new Blog(blogData);
+    const response = await api.post('api/blogs', newBlog);
   }
 
   async deleteBlog(blogId) {
-    const response = await api.delete(`api/blogs:id=${blogId}`);
+    const response = await api.delete(`api/blogs/${blogId}`);
   }
 
    setActiveBlog(blog) {

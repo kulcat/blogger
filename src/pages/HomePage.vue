@@ -40,7 +40,7 @@ async function getBlogs() {
 
     <div v-if="AppState.account" id="newBlogModal" class="modal fade" tabindex="-1" aria-hidden="true"
       style="width: 100% !important;">
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-dialog-centered modal-fullscreen">
         <div class="modal-content container">
           <div class="modal-header bg-warning">
             <h5 class="modal-title">Create a Blog</h5>
