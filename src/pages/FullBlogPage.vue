@@ -1,12 +1,25 @@
 <script setup>
 import { AppState } from '@/AppState';
 import BlogPreview from '@/components/BlogPreview.vue';
+import EditBlogForm from '@/components/EditBlogForm.vue';
 import { router } from '@/router';
 import { blogService } from '@/services/BlogService';
 import { computed, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 
 const route = useRoute();
+
+if (!AppState.activeBlog) {
+  router.replace({ name: 'Home' });
+}
+
+onBeforeRouteUpdate((to, from, next) => {
+  if (!AppState.activeBlog) {
+    next({ name: 'Home' })
+  } else {
+    next()
+  }
+})
 
 const blog = computed(() => AppState.activeBlog);
 
@@ -28,7 +41,22 @@ async function deleteBlog(blogId) {
 
   <main class="container d-flex flex-column justify-content-center">
 
-    <div class="d-flex flex-column border-2 border border-black rounded-3 shadow-lg gap-3" style="">
+    <div v-if="AppState.account" id="editBlogModal" class="modal fade" tabindex="-1" aria-hidden="true"
+      style="width: 100% !important;">
+      <div class="modal-dialog modal-dialog-centered modal-fullscreen">
+        <div class="modal-content container">
+          <div class="modal-header bg-warning">
+            <h5 class="modal-title">Edit Blog</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <EditBlogForm :creator="AppState.account" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex flex-column border-2 border border-black rounded-3 shadow-lg gap-3">
 
       <div>
         <img class="img-fluid object-fit-cover w-100 h-100" :src="blog?.imgUrl"
@@ -61,19 +89,20 @@ async function deleteBlog(blogId) {
 
         <p class="fw-light">{{ blog?.body }}</p>
 
-        <button v-if="AppState?.account?.id === blog?.creatorId" type="button" class="btn"
-          @click="deleteBlog(blog?.id)">
-          <i class="mdi mdi-delete text-danger fs-1"></i>
-        </button>
+        <div>
+          <button v-if="AppState?.account?.id === blog?.creatorId" type="button" class="btn"
+            @click="deleteBlog(blog?.id)">
+            <i class="mdi mdi-delete text-danger fs-1"></i>
+          </button>
 
-        <button v-if="AppState?.account?.id === blog?.creatorId" type="button" class="btn">
-          <i class="mdi mdi-edit text-danger fs-1"></i>
-        </button>
+          <button v-if="AppState?.account?.id === blog?.creatorId" type="button" class="btn" data-bs-toggle="modal"
+            data-bs-target="#editBlogModal">
+            <i class="mdi mdi-pencil text-warning fs-1"></i>
+          </button>
+        </div>
+
       </div>
 
-    </div>
-    <div>
-      <!-- Comments -->
     </div>
   </main>
 

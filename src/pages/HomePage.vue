@@ -1,10 +1,10 @@
 <script setup>
 import { AppState } from '@/AppState';
-import BlogForm from '@/components/BlogForm.vue';
 import BlogPreview from '@/components/BlogPreview.vue';
 import { blogService } from '@/services/BlogService';
 import { Pop } from '@/utils/Pop';
 import { computed, onMounted, watch } from 'vue';
+import NewBlogForm from '@/components/NewBlogForm.vue';
 
 watch(
   () => AppState.blogs,
@@ -47,7 +47,7 @@ async function getBlogs() {
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <BlogForm :creator="AppState.account" />
+            <NewBlogForm :creator="AppState.account" />
           </div>
         </div>
       </div>

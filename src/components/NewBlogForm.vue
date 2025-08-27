@@ -31,7 +31,7 @@ async function submitForm() {
     body.value = '';
     imgUrl.value = '';
 
-    const modalElm = document.getElementById('myModal');
+    const modalElm = document.getElementById('newBlogModal');
     const modal = Modal.getInstance(modalElm);
     modal.hide();
   }
@@ -65,13 +65,13 @@ const onImageError = (e) => {
       <div>
         <div class="d-flex flex-row">
           <div class="d-flex align-items-center gap-1">
-            <img class="object-fit-contain rounded-circle" style="width: 10rem; height: 10rem;" :src="creator?.picture">
+            <img class="object-fit-cover rounded-circle" style="width: 10rem; height: 10rem;" :src="creator?.picture">
           </div>
 
           <div class="d-flex flex-col">
             <input type="text" placeholder="Title" name="title" v-model="title" :required="true">
 
-            <span class="fw-bold text-black">By {{ creator?.name }}</span>
+            <span class="fw-bold">By {{ creator?.name }}</span>
 
             <span class="fw-lighter">Last updated: {{ lastUpdated }}</span>
           </div>

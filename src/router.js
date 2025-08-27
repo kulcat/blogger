@@ -18,8 +18,8 @@ const routes = [
   },
   {
     path: '/blog/',
-    name: 'BlogView',
-    component: loadPage('BlogViewPage')
+    name: 'FullBlog',
+    component: loadPage('FullBlogPage')
   },
   {
     path: '/account',

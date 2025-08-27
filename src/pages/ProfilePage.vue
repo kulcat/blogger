@@ -1,12 +1,24 @@
 <script setup>
 import { AppState } from '@/AppState';
-import BlogForm from '@/components/BlogForm.vue';
+import NewBlogForm from '@/components/NewBlogForm.vue';
 import BlogPreview from '@/components/BlogPreview.vue';
 import { computed, onMounted, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 import { router } from '@/router';
 
 const route = useRoute();
+
+if (!route.params.id) {
+  router.replace({ name: 'Home' });
+}
+
+onBeforeRouteUpdate((to, from, next) => {
+  if (!to.params.id) {
+    next({ name: 'Home' })
+  } else {
+    next()
+  }
+})
 
 // const blogs = computed(() => AppState.blogs.filter);
 
@@ -34,7 +46,7 @@ const profileBlogs = computed(() => AppState.blogs.filter(blog => blog.creatorId
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <BlogForm :creator="AppState.account" />
+            <NewBlogForm :creator="AppState.account" />
           </div>
         </div>
       </div>

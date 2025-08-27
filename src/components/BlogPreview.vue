@@ -27,9 +27,9 @@ defineProps({
         <span class="fw-bolder text-dark-emphasis">{{ blog?.title }}</span>
         <p class="fw-light text-clamp">{{ blog?.body }}</p>
 
-        <RouterLink class="text-reset text-decoration-none" :to="{ name: 'BlogView' }"
+        <RouterLink class="text-reset text-decoration-none" :to="{ name: 'FullBlog' }"
           @click="blogService.setActiveBlog(blog)">
-          <span>Read more and comment</span>
+          <button class="btn btn-warning">View Full Blog</button>
         </RouterLink>
       </div>
 
