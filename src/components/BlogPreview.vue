@@ -16,7 +16,7 @@ defineProps({
     <div class="d-flex flex-column justify-content-between">
 
       <div class="d-flex flex-column">
-        <RouterLink class="text-reset text-decoration-none" :to="{ name: 'Profile', params: { id: blog?.creatorId } }">
+        <RouterLink class="text-reset text-decoration-none" :to="{ name: 'Profile', query: { id: blog?.creatorId } }">
           <div class="d-flex align-items-center gap-1">
             <img class="object-fit-cover rounded-circle" style="width: 2rem; height: 2rem;"
               :src="blog?.creator?.picture">

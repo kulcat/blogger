@@ -14,6 +14,29 @@ defineProps({
 const title = ref(AppState.activeBlog.title);
 const body = ref(AppState.activeBlog.body);
 const imgUrl = ref(AppState.activeBlog.imgUrl);
+const tags = ref(AppState.activeBlog.tags);
+const inputTag = ref("");
+
+function addTag() {
+  if (inputTag.value) {
+    if (tags.value.find(tag => tag.toLowerCase() === inputTag.value.toLowerCase())) {
+      Pop.toast("tag already exists.");
+    }
+    else {
+      tags.value.push(inputTag.value);
+      inputTag.value = "";
+    }
+  }
+}
+
+function removeTag() {
+  if (tags.value.find(tag => tag === inputTag.value)) {
+    tags.value = tags.value.filter(tag => tag !== inputTag.value);
+  }
+  else {
+    Pop.toast("No such tag in tags");
+  }
+}
 
 async function submitForm() {
   try {
@@ -30,6 +53,7 @@ async function submitForm() {
     title.value = '';
     body.value = '';
     imgUrl.value = '';
+    tags.value.length = 0;
 
     const modalElm = document.getElementById('editBlogModal');
     const modal = Modal.getInstance(modalElm);
@@ -52,6 +76,7 @@ function saveBlogDraft() {
     title: title.value,
     body: body.value,
     imgUrl: imgUrl.value,
+    tags: tags.value
   };
 
   blogService.saveBlogDraft(blogData);
@@ -62,6 +87,7 @@ function loadBlogDraft() {
   title.value = AppState.savedBlogDraft.title;
   body.value = AppState.savedBlogDraft.body;
   imgUrl.value = AppState.savedBlogDraft.imgUrl;
+  tags.value = AppState.savedBlogDraft.tags;
 }
 
 </script>
@@ -92,6 +118,23 @@ function loadBlogDraft() {
 
             <span class="fw-lighter">Last updated: {{ lastUpdated }}</span>
           </div>
+        </div>
+
+        <div class="mb-3">
+          <div v-if="tags.length > 0">
+            Tags:
+            <span>{{ tags.join(", ") }} </span>
+          </div>
+          <div v-else>
+            <span>No tags</span>
+          </div>
+          <input class="form-control" type="text" placeholder="Tag" name="tag" v-model="inputTag">
+          <button type="button" class="btn btn-warning" @click="addTag">
+            Add
+          </button>
+          <button type="button" class="btn btn-warning" @click="removeTag">
+            Remove
+          </button>
         </div>
 
         <div class="mb-3">

@@ -3,7 +3,7 @@ import { AppState } from '@/AppState';
 import BlogPreview from '@/components/BlogPreview.vue';
 import { blogService } from '@/services/BlogService';
 import { Pop } from '@/utils/Pop';
-import { computed, onMounted, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import NewBlogForm from '@/components/NewBlogForm.vue';
 
 watch(
@@ -14,7 +14,26 @@ watch(
   { immediate: true }
 );
 
-const blogs = computed(() => AppState.blogs);
+
+const blogs = computed(() => {
+  if (search.value) {
+    if (searchBy.value == "author") {
+      return AppState.blogs.filter(blog => blog.creator.name.toLowerCase().includes(search.value.toLowerCase()));
+    }
+    if (searchBy.value == "title") {
+      return AppState.blogs.filter(blog => blog.title.toLowerCase().includes(search.value.toLowerCase()));
+    }
+    if (searchBy.value == "tags") {
+      return AppState.blogs.filter(blog =>
+        blog.tags.some(tag => tag.toLowerCase().includes(search.value.toLowerCase())));
+    }
+  }
+
+  return AppState.blogs;
+});
+
+const search = ref("");
+const searchBy = ref("author");
 
 async function getBlogs() {
   try {
@@ -34,6 +53,17 @@ async function getBlogs() {
       style="width: 3rem; height: 3rem;">
       <i class="mdi mdi-plus"></i>
     </button>
+  </div>
+
+  <div class="container">
+    <form>
+      <input type="text" placeholder="Search" v-model="search">
+      <select name="" id="" v-model="searchBy">
+        <option value="author">Author</option>
+        <option value="title">Title</option>
+        <option value="tags">Tags</option>
+      </select>
+    </form>
   </div>
 
   <main class="container d-flex flex-column">

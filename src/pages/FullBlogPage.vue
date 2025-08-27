@@ -9,18 +9,6 @@ import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 
 const route = useRoute();
 
-if (!AppState.activeBlog) {
-  router.replace({ name: 'Home' });
-}
-
-onBeforeRouteUpdate((to, from, next) => {
-  if (!AppState.activeBlog) {
-    next({ name: 'Home' })
-  } else {
-    next()
-  }
-})
-
 const blog = computed(() => AppState.activeBlog);
 
 async function deleteBlog(blogId) {
@@ -68,7 +56,7 @@ async function deleteBlog(blogId) {
 
           <div class="d-flex align-items-center gap-1">
             <RouterLink class="text-reset text-decoration-none"
-              :to="{ name: 'Profile', params: { id: blog?.creatorId } }">
+              :to="{ name: 'Profile', query: { id: blog?.creatorId } }">
               <img class="object-fit-cover rounded-circle" style="width: 10rem; height: 10rem;"
                 :src="blog?.creator?.picture">
             </RouterLink>
@@ -85,6 +73,14 @@ async function deleteBlog(blogId) {
             <span class="fw-lighter">Last updated: {{ blog?.date }}</span>
           </div>
 
+        </div>
+
+        <div v-if="blog.tags.length > 0">
+          Tags:
+          <span>{{ blog.tags.join(", ") }} </span>
+        </div>
+        <div v-else>
+          <span>No tags</span>
         </div>
 
         <p class="fw-light">{{ blog?.body }}</p>

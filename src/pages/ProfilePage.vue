@@ -2,29 +2,37 @@
 import { AppState } from '@/AppState';
 import NewBlogForm from '@/components/NewBlogForm.vue';
 import BlogPreview from '@/components/BlogPreview.vue';
-import { computed, onMounted, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 import { router } from '@/router';
+import { Pop } from '@/utils/Pop';
+import { blogService } from '@/services/BlogService';
 
 const route = useRoute();
 
-if (!route.params.id) {
-  router.replace({ name: 'Home' });
+if (!route.query.id) {
+  router.push({ name: 'Home' });
 }
 
-onBeforeRouteUpdate((to, from, next) => {
-  if (!to.params.id) {
-    next({ name: 'Home' })
-  } else {
-    next()
+const blogs = computed(() => AppState.blogs);
+
+const profileBlogs = computed(() =>
+  blogs.value.filter(blog => blog.creatorId === route.query.id)
+);
+
+onMounted(() => {
+  getBlogs();
+});
+
+async function getBlogs() {
+  try {
+    await blogService.getBlogs();
   }
-})
-
-// const blogs = computed(() => AppState.blogs.filter);
-
-// const creator = blogs.value.find(blog => blog.creator.id === route.params.id );
-
-const profileBlogs = computed(() => AppState.blogs.filter(blog => blog.creatorId === route.params.id));
+  catch (error) {
+    Pop.toast('Could not get blogs', 'error');
+    console.log(error);
+  }
+}
 
 </script>
 

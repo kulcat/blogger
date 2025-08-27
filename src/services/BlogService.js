@@ -23,6 +23,9 @@ export class BlogService {
   async editBlog(blogData) {
     const newBlog = new Blog(blogData);
     const response = await api.put(`api/blogs/${AppState.activeBlog.id}`, newBlog);
+    AppState.activeBlog.title = blogData.title;
+    AppState.activeBlog.body = blogData.body;
+    AppState.activeBlog.imgUrl = blogData.imgUrl;
   }
 
   async deleteBlog(blogId) {
