@@ -37,7 +37,10 @@ async function getBlogs() {
 </script>
 
 <template>
-  <main class="container">
+  <div v-if="!profileBlogs.length">
+    loading
+  </div>
+  <main class="container" v-else>
     <div class="d-flex justify-content-between align-items-center w-100">
       <RouterLink class="text-reset text-decoration-none" :to="{ name: 'Home' }">
         <i class="mdi mdi-exit-to-app text-danger fs-1" style="display: inline-block;  transform: scaleX(-1);"></i>

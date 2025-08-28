@@ -13,21 +13,14 @@ const routes = [
     component: loadPage('HomePage')
   },
   {
-    path: '/profile/',
+    path: '/profile',
     name: 'Profile',
     component: loadPage('ProfilePage'),
   },
   {
-    path: '/blog/',
+    path: '/blog/:blogId',
     name: 'FullBlog',
     component: loadPage('FullBlogPage'),
-    beforeEnter: (to, from, next) => {
-    if (!AppState.activeBlog) {
-      next({ name: "Home" });
-    } else {
-      next();
-    }
-  }
   },
   {
     path: '/account',

@@ -19,6 +19,11 @@ export class BlogService {
     const newBlog = new Blog(blogData);
     const response = await api.post(`api/blogs`, newBlog);
   }
+  
+  async getBlog(blogId) {
+    const response = await api.get(`api/blogs/${blogId}`);
+    AppState.activeBlog = new Blog(response.data)
+  }
 
   async editBlog(blogData) {
     AppState.activeBlog.title = blogData.title;

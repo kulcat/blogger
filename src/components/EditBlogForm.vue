@@ -29,7 +29,7 @@ const lastUpdated = computed(() => new Date().toLocaleString([], {
 function addTag() {
   if (inputTag.value) {
     if (tags.value.find(tag => tag.toLowerCase() === inputTag.value.toLowerCase())) {
-      Pop.toast("tag already exists.");
+      Pop.toast("Tag already exists.");
     }
     else {
       tags.value.push(inputTag.value);
