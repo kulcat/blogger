@@ -29,7 +29,7 @@ defineProps({
 
         <RouterLink class="text-reset text-decoration-none" :to="{ name: 'FullBlog' }"
           @click="blogService.setActiveBlog(blog)">
-          <button class="btn btn-warning">View Full Blog</button>
+          <button class="btn btn-warning">View</button>
         </RouterLink>
       </div>
 
@@ -60,8 +60,8 @@ defineProps({
 
 .text-clamp {
   display: -webkit-box;
-  line-clamp: 4;
-  -webkit-line-clamp: 4;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;

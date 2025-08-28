@@ -41,7 +41,6 @@ async function submitForm() {
       <div v-if="account">
         <h1>{{ account.name }}</h1>
         <img class="rounded-circle" :src="account.picture" alt="" />
-        <p>{{ account.email }}</p>
       </div>
       <div v-else>
         <h1>Loading... <i class="mdi mdi-loading mdi-spin"></i></h1>

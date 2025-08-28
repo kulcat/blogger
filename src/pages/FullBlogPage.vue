@@ -21,80 +21,90 @@ async function deleteBlog(blogId) {
 
 <template>
 
-  <div class="container">
-    <RouterLink class="text-reset text-decoration-none" :to="{ name: 'Home' }">
-      <i class="mdi mdi-exit-to-app text-danger fs-1" style="display: inline-block;  transform: scaleX(-1);"></i>
-    </RouterLink>
-  </div>
+  <main class="container">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <RouterLink class="text-reset text-decoration-none" :to="{ name: 'Home' }">
+        <i class="mdi mdi-exit-to-app text-danger fs-1" style="display: inline-block;  transform: scaleX(-1);"></i>
+      </RouterLink>
 
-  <main class="container d-flex flex-column justify-content-center">
+      <div>
+        <button v-if="AppState?.account?.id === blog?.creatorId" type="button" class="btn"
+          @click="deleteBlog(blog?.id)">
+          <i class="mdi mdi-delete text-danger fs-1"></i>
+        </button>
 
-    <div v-if="AppState.account" id="editBlogModal" class="modal fade" tabindex="-1" aria-hidden="true"
-      style="width: 100% !important;">
-      <div class="modal-dialog modal-dialog-centered modal-fullscreen">
-        <div class="modal-content container">
-          <div class="modal-header bg-warning">
-            <h5 class="modal-title">Edit Blog</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <EditBlogForm :creator="AppState.account" />
-          </div>
-        </div>
+        <button v-if="AppState?.account?.id === blog?.creatorId" type="button" class="btn" data-bs-toggle="modal"
+          data-bs-target="#editBlogModal">
+          <i class="mdi mdi-pencil text-warning fs-1"></i>
+        </button>
       </div>
     </div>
 
-    <div class="d-flex flex-column border-2 border border-black rounded-3 shadow-lg gap-3">
+    <div class="d-flex flex-column justify-content-center">
 
-      <div>
-        <img class="img-fluid object-fit-cover w-100 h-100" :src="blog?.imgUrl"
-          style="max-height: 90vh; object-position: center;">
+      <div v-if="AppState.account" id="editBlogModal" class="modal fade" tabindex="-1" aria-hidden="true"
+        style="width: 100% !important;">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen">
+          <div class="modal-content container">
+            <div class="modal-header bg-warning">
+              <h5 class="modal-title">Edit Blog</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <EditBlogForm :creator="AppState.account" />
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="px-3 py-2 d-flex flex-column gap-3">
-        <div class="d-flex gap-3">
+      <div class="d-flex flex-column border-2 border border-black rounded-3 shadow-lg gap-3">
 
-          <div class="d-flex align-items-center gap-1">
-            <RouterLink class="text-reset text-decoration-none"
-              :to="{ name: 'Profile', query: { id: blog?.creatorId } }">
-              <img class="object-fit-cover rounded-circle" style="width: 10rem; height: 10rem;"
-                :src="blog?.creator?.picture">
-            </RouterLink>
+        <div class="p-3">
+          <img class="img-fluid object-fit-cover border border-0 rounded-3 w-100 h-100" :src="blog?.imgUrl"
+            style="max-height: 90vh; object-position: center;">
+        </div>
+
+        <div class="px-3 py-2 d-flex flex-column gap-3">
+          <div class="d-flex gap-3">
+
+            <div class="d-flex align-items-center gap-1">
+              <RouterLink class="text-reset text-decoration-none"
+                :to="{ name: 'Profile', query: { id: blog?.creatorId } }">
+                <img class="object-fit-cover rounded-circle" style="width: 10rem; height: 10rem;"
+                  :src="blog?.creator?.picture">
+              </RouterLink>
+            </div>
+
+            <div class="d-flex flex-column">
+              <span class="fw-bolder fs-3">{{ blog?.title }}</span>
+
+              <RouterLink class="text-reset text-decoration-none"
+                :to="{ name: 'Profile', query: { id: blog?.creatorId } }">
+                <span class="fw-bold">By {{ blog?.creator?.name }}</span>
+              </RouterLink>
+
+              <span class="fw-lighter">Last updated: {{ blog?.lastUpdated.toLocaleString([], {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+              }) }}
+              </span>
+            </div>
+
           </div>
 
-          <div class="d-flex flex-column">
-            <span class="fw-bolder fs-3">{{ blog?.title }}</span>
-
-            <RouterLink class="text-reset text-decoration-none"
-              :to="{ name: 'Profile', params: { id: blog?.creatorId } }">
-              <span class="fw-bold">By {{ blog?.creator?.name }}</span>
-            </RouterLink>
-
-            <span class="fw-lighter">Last updated: {{ blog?.date }}</span>
+          <div v-if="blog.tags.length > 0">
+            Tags:
+            <span>{{ blog.tags.join(", ") }} </span>
+          </div>
+          <div v-else>
+            <span>No tags</span>
           </div>
 
-        </div>
+          <p class="fw-light">{{ blog?.body }}</p>
 
-        <div v-if="blog.tags.length > 0">
-          Tags:
-          <span>{{ blog.tags.join(", ") }} </span>
-        </div>
-        <div v-else>
-          <span>No tags</span>
-        </div>
-
-        <p class="fw-light">{{ blog?.body }}</p>
-
-        <div>
-          <button v-if="AppState?.account?.id === blog?.creatorId" type="button" class="btn"
-            @click="deleteBlog(blog?.id)">
-            <i class="mdi mdi-delete text-danger fs-1"></i>
-          </button>
-
-          <button v-if="AppState?.account?.id === blog?.creatorId" type="button" class="btn" data-bs-toggle="modal"
-            data-bs-target="#editBlogModal">
-            <i class="mdi mdi-pencil text-warning fs-1"></i>
-          </button>
         </div>
 
       </div>
